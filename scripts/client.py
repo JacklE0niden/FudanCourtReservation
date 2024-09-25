@@ -128,8 +128,8 @@ class Client(object):
         # self.logger = log.get_logger('logs', name='client') logging not support multiprocess
 
         # Use to recognize the Verification Code (http://www.chaojiying.com/).
-        self.cjy_usrname = '15806018981'
-        self.cjy_password = 'Lr31415926'
+        self.cjy_usrname = '*******'
+        self.cjy_password = '*******'
         self.cjy_soft_id = '963556'
         self.Chaojiying_Client = Chaojiying_Client(self.cjy_usrname, self.cjy_password, self.cjy_soft_id)
 

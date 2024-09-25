@@ -1,9 +1,9 @@
 user1:
-  username: '21307130150'
-  password: 'Lr31415926'
+  username: '21307130***'
+  password: '***********'
   orderuser: '林睿'
   mobile: '15806018981'
-  email: '21307130150@m.fudan.edu.cn'
+  email: '21307130***@m.fudan.edu.cn'
   court_name: '江湾体育馆排球场1号'
   stage_1:
     - '12:00' # 预约时间段
