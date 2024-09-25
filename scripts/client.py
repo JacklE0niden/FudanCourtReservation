@@ -77,7 +77,8 @@ class Client(object):
         self.mobile = configs['mobile']
         self.court_name = configs['court_name']
         self.email = configs['email']
-        self.driver_path = './chromedriver/chromedriver.exe'
+        # windows系统需要改为chromedriver.exe
+        self.driver_path = './chromedriver/chromedriver'
         # self.time_end = time_end
         self.time_end = '23:59:59'
 
@@ -127,9 +128,9 @@ class Client(object):
         # self.logger = log.get_logger('logs', name='client') logging not support multiprocess
 
         # Use to recognize the Verification Code (http://www.chaojiying.com/).
-        self.cjy_usrname = 'xxx'
-        self.cjy_password = 'xxx'
-        self.cjy_soft_id = 'xxx'
+        self.cjy_usrname = '15806018981'
+        self.cjy_password = 'Lr31415926'
+        self.cjy_soft_id = '963556'
         self.Chaojiying_Client = Chaojiying_Client(self.cjy_usrname, self.cjy_password, self.cjy_soft_id)
 
         # Preseted time order
@@ -145,35 +146,56 @@ class Client(object):
 
     def get_cookie_by_selenium(self):
         chrome_options = Options()
-        chrome_options.add_argument("--headless")
-        chrome_options.binary_location = "C:/Program Files/Google/Chrome/Application/chrome.exe"
-        s = Service(r'{}'.format(self.driver_path))
-        # browser = webdriver.Chrome(service=s)
-        browser = webdriver.Chrome(service=s,options=chrome_options)
+        chrome_options.add_argument("--headless")  # 无头模式运行
+        
+        # 设置 macOS 上 Chrome 浏览器的路径
+        chrome_options.binary_location = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+        
+        # 设置 chromedriver 的路径（确保 chromedriver 文件具有可执行权限）
+        s = Service(self.driver_path)  # 确保 self.driver_path 指向 macOS 上的 chromedriver 文件
+        
+        # 启动 Chrome 浏览器
+        browser = webdriver.Chrome(service=s, options=chrome_options)
+        
+        # 打开登录页面
         browser.get("https://uis.fudan.edu.cn/authserver/login?service=https%3A%2F%2Felife.fudan.edu.cn%2Flogin2.action")
         time.sleep(5)
-        browser.find_element(By.ID,"username").send_keys("{}".format(self.username))
-        browser.find_element(By.ID,"password").send_keys("{}".format(self.password))
+        
+        # 填写用户名和密码
+        browser.find_element(By.ID, "username").send_keys(self.username)
+        browser.find_element(By.ID, "password").send_keys(self.password)
         logging.info('成功填充账号和密码！！！')
+        
         time.sleep(2)
-        browser.find_element(By.ID,"idcheckloginbtn").click()
+        
+        # 点击登录按钮
+        browser.find_element(By.ID, "idcheckloginbtn").click()
         time.sleep(6)
+        
+        # 获取 cookie
         cookie_items = browser.get_cookies()
         cookie_str = ''
         for item_cookie in cookie_items:
-            item_str = item_cookie["name"]+"="+item_cookie["value"]+"; "
+            item_str = item_cookie["name"] + "=" + item_cookie["value"] + "; "
             cookie_str += item_str
+        
+        # 关闭浏览器
         browser.quit()
+        
+        # 检查是否成功获取到关键 cookie
         if 'iPlanetDirectoryPro' in cookie_str:
             logging.info('成功获取cookie！！！')
             logging.info(cookie_str)
             self.cookie = cookie_str
+            
+            # 解析 cookie 字符串为字典
             cookie_lst = self.cookie.split(';')
             for c_item in cookie_lst:
                 c = c_item.strip()
                 c_new = c.split('=')
                 if len(c_new) == 2:
                     self.cookie_dic[c_new[0]] = c_new[1]
+        
         return cookie_str
 
     def get_resource(self):
@@ -223,6 +245,7 @@ class Client(object):
             valid_text = valid_tips_text.text.split("请依次点击：")[-1]
             print(f"Successfully retrieved valid text: {valid_text}")
             base64_str = img_element.get_attribute('src')
+            # print(f"Successfully retrieved base64 string: {base64_str}")
             if base64_str:
                 captcha_image = image_process.base64_to_image(base64_str)
             else:
@@ -231,17 +254,23 @@ class Client(object):
             print(f"An error occurred: {e}")
             valid_text = None
             captcha_image = None
+        # print("captcha_image:", captcha_image)
         return captcha_image, valid_text
 
     def get_captcha_results(self, captcha_image):
+        print("is it here?",type(captcha_image))
         if captcha_image:
             res_dic = self.Chaojiying_Client.post_pic(captcha_image, 9501)
+            print(f"Successfully retrieved captcha results: {res_dic}")
             captcha_dic = self.Chaojiying_Client.extract_coordinates(res_dic)
+            print(f"Successfully extracted coordinates: {captcha_dic}")
         else:
             captcha_dic = None
+        # print(f"capchadict!!!!!!: {captcha_dic}")
         return captcha_dic
 
     def click_captcha(self, browser, valid_text, captcha_dic):
+        
         captcha_element = browser.find_element(By.CLASS_NAME, 'valid_bg-img')
 
         from packaging.version import Version
@@ -280,7 +309,7 @@ class Client(object):
     def get_order_page_by_selenium(self, resource_id):
         chrome_options = Options()
         chrome_options.add_argument("--headless")
-        chrome_options.binary_location = "C:/Program Files/Google/Chrome/Application/chrome.exe"
+        chrome_options.binary_location = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
         s = Service(r'{}'.format(self.driver_path))
         # browser = webdriver.Chrome(service=s)
         browser = webdriver.Chrome(service=s, options=chrome_options)
@@ -305,6 +334,8 @@ class Client(object):
             return
 
         captcha_image, valid_text = self.get_captcha_image_and_valid_text(browser)
+        # print(f"Successfully retrieved captcha image and valid text: {captcha_image}")
+        print("Successfully retrieved captcha image and valid text!")
         captcha_dic = self.get_captcha_results(captcha_image)
         print(f"Successfully retrieved captcha results: {captcha_dic}")
         # # Test
@@ -312,6 +343,7 @@ class Client(object):
         # captcha_dic = {'务': {'left': 285, 'top': 129}, '息': {'left': 197, 'top': 127},
                        # '民': {'left': 121, 'top': 102}, '农': {'left': 56, 'top': 81}}
         self.click_captcha(browser, valid_text, captcha_dic)
+        # print("is it here?")
 
         max_tries = 3
         time.sleep(1)

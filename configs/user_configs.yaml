@@ -1,9 +1,9 @@
 user1:
-  username: '学号'
-  password: '密码'
-  orderuser: '名字'
-  mobile: '电话号码'
-  email: ''
+  username: '21307130150'
+  password: 'Lr31415926'
+  orderuser: '林睿'
+  mobile: '15806018981'
+  email: '21307130150@m.fudan.edu.cn'
   court_name: '江湾体育馆排球场1号'
   stage_1:
     - '12:00' # 预约时间段
@@ -21,4 +21,5 @@ user1:
 #     '江湾体育馆网球场':'8aecc6ce7176eb18017225bfcd292809',
 #     '江湾体育馆排球场1号': '8aecc6ce878581d701879c7548c6737d',
 #     '江湾室外网球场':'8aecc6ce780fe18301786c51f2a5627b'
+#     '南区体育馆乒乓球':'8aecc6ce8d17fc0e018e50c24f3a3367'
 #     }

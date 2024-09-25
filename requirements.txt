@@ -1,0 +1,10 @@
+pyyaml
+apscheduler
+bs4
+lxml
+requests
+selenium
+numpy
+pillow
+opencv-python
+packaging
