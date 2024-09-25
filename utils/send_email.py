@@ -4,7 +4,7 @@ from email.utils import formataddr
 from email.header import Header
 
 def send_mail(now_time, scheduled_time, court, username, user):
-    sender = '770445973@qq.com'
+    sender = '243981062@qq.com'
     # user = '770445973@qq.com'
     flag = True
     try:

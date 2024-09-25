@@ -1,6 +1,18 @@
 # FudanCourtReservation
 
-FudanCourtReservation 是一个用于自动预约复旦体育场馆（如羽毛球，网球等）的 Python 脚本。该项目于本人硕士期间完成，现已修改适用于新版本，但采用的是selenium模拟操作，如需使用该项目，请根据readme自行修改部分代码及处理可能的bug。另该项目仅供学习和技术交流，造成的一切后果自负。
+FudanCourtReservation 是一个用于自动预约复旦体育场馆（如羽毛球，网球等）的 Python 脚本。
+
+原始仓库：    
+    git clone https://github.com/MinhZou/FudanCourtReservation.git
+原作者：
+"""
+Use to book sports venues on the Fudan campus
+@author: MinhZou
+@date: 2022-04-03 update 2024-09-01
+@e-mail: 770445973@qq.com
+"""
+
+请根据readme自行修改部分代码及处理可能的bug。另该项目仅供学习和技术交流，造成的一切后果自负。
 
 ## 特性
 

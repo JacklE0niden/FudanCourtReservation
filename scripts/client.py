@@ -309,6 +309,7 @@ class Client(object):
     def get_order_page_by_selenium(self, resource_id):
         chrome_options = Options()
         chrome_options.add_argument("--headless")
+        # change the path to the Chrome browser on macOS or Windows
         chrome_options.binary_location = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
         s = Service(r'{}'.format(self.driver_path))
         # browser = webdriver.Chrome(service=s)
