@@ -23,3 +23,4 @@ if __name__ == '__main__':
     # for h in [6]:
     #     sched.add_job(Client(user1_configs).scheduled_job, 'cron', day_of_week='0,2', hour=h, minute=57)
     # sched.start()
+

@@ -37,6 +37,7 @@ from PIL import Image
 from io import BytesIO
 import cv2
 from utils.chaojiying import Chaojiying_Client
+from utils.ocr import get_captcha_results_nn
 from selenium.webdriver.common.action_chains import ActionChains
 
 from utils import send_email, image_process
@@ -128,8 +129,8 @@ class Client(object):
         # self.logger = log.get_logger('logs', name='client') logging not support multiprocess
 
         # Use to recognize the Verification Code (http://www.chaojiying.com/).
-        self.cjy_usrname = '*******'
-        self.cjy_password = '*******'
+        self.cjy_usrname = '15806018981'
+        self.cjy_password = 'Lr31415926'
         self.cjy_soft_id = '963556'
         self.Chaojiying_Client = Chaojiying_Client(self.cjy_usrname, self.cjy_password, self.cjy_soft_id)
 
@@ -257,7 +258,7 @@ class Client(object):
         # print("captcha_image:", captcha_image)
         return captcha_image, valid_text
 
-    def get_captcha_results(self, captcha_image):
+    def get_captcha_results(self, captcha_image): # 获取验证码识别结果
         print("is it here?",type(captcha_image))
         if captcha_image:
             res_dic = self.Chaojiying_Client.post_pic(captcha_image, 9501)
@@ -268,6 +269,10 @@ class Client(object):
             captcha_dic = None
         # print(f"capchadict!!!!!!: {captcha_dic}")
         return captcha_dic
+    
+    # def get_captcha_results_nn(self, captcha_image): # 获取验证码识别结果
+    #     print("is it here?",type(captcha_image))
+        
 
     def click_captcha(self, browser, valid_text, captcha_dic):
         
@@ -337,7 +342,14 @@ class Client(object):
         captcha_image, valid_text = self.get_captcha_image_and_valid_text(browser)
         # print(f"Successfully retrieved captcha image and valid text: {captcha_image}")
         print("Successfully retrieved captcha image and valid text!")
-        captcha_dic = self.get_captcha_results(captcha_image)
+        
+        
+        # 识图
+        # captcha_dic = self.get_captcha_results(captcha_image)
+        captcha_dic = get_captcha_results_nn(captcha_image)
+
+
+
         print(f"Successfully retrieved captcha results: {captcha_dic}")
         # # Test
         # valid_text = "农务民息"
@@ -363,7 +375,13 @@ class Client(object):
                 print("Retrying...")
                 time.sleep(3)
                 captcha_image, valid_text = self.get_captcha_image_and_valid_text(browser)
-                captcha_dic = self.get_captcha_results(captcha_image)
+
+
+                # 识图
+                # captcha_dic = self.get_captcha_results(captcha_image)
+                captcha_dic = get_captcha_results_nn(captcha_image)
+
+
                 print(f"Successfully retrieved captcha results: {captcha_dic}")
                 # # Test
                 # valid_text = "农务民息"
